@@ -56,6 +56,8 @@ void loop()
     mControl->SetSoap2(0);
   }
   
-  mControl->SetTemperature(3);
+  mControl->SetHeater(true);
+  //mControl->SetTemperature(2);
+  
 }
 

@@ -83,7 +83,7 @@ int HardwareControl::GetTemperature()
 
 boolean HardwareControl::GetSoap1()
 {
-  centipede.digitalWrite(OUT_KEYSELECT, 0);
+  SetKeySelect(0);
   if(centipede.digitalRead(IN_IN1) == HIGH)
   {
     return true;
@@ -96,7 +96,7 @@ boolean HardwareControl::GetSoap1()
 
 boolean HardwareControl::GetSoap2()
 {
-  centipede.digitalWrite(OUT_KEYSELECT, 0);
+  SetKeySelect(0);
   if(centipede.digitalRead(IN_IN2) == HIGH)
   {
     return true;
@@ -124,49 +124,28 @@ void HardwareControl::SetSoap2(int level)
 {
   if (level ==0 )
   {
-    centipede.digitalWrite(OUT_GROUP2, HIGH);
-    centipede.digitalWrite(OUT_GROUP1, LOW);
-    centipede.digitalWrite(OUT_DATAC, LOW);
-    centipede.digitalWrite(OUT_DATAB, LOW);
-    centipede.digitalWrite(OUT_DATAA, LOW);
+    SetGroup(2, 1);
+    SetGroup(1, 0);
+    SetData(0);
   }
   else
   {
-    centipede.digitalWrite(OUT_GROUP2, HIGH);
-    centipede.digitalWrite(OUT_GROUP1, LOW);
-    centipede.digitalWrite(OUT_DATAC, HIGH);
-    centipede.digitalWrite(OUT_DATAB, LOW);
-    centipede.digitalWrite(OUT_DATAA, LOW);
+    SetGroup(2, 1);
+    SetGroup(1,0);
+    SetData(3);
   }
+  Strobe();
 }
 
 void HardwareControl::SetHeater(boolean state)
 {
   if(!state)
   {
-    Serial.println(state);
     centipede.digitalWrite(OUT_HEATER, HIGH);
   }
   else
   {
     centipede.digitalWrite(OUT_HEATER, LOW);
-  }
-}
-
-void HardwareControl::SetTemperature(int level)
-{
-  if(level != 0)
-  {
-    if(GetTemperature() < level)
-    {
-      Serial.println(level);
-      SetHeater(true);
-    } 
-    else
-    {
-      Serial.println("Test");
-      SetHeater(false);
-    }
   }
 }
 
@@ -188,19 +167,57 @@ void HardwareControl::SetBuzzer(int level)
 
 void HardwareControl::SetKeySelect(int value)
 {
+  centipede.digitalWrite(OUT_KEYSELECT, value);
 }
 
-void HardwareControl::SetGroup(int group)
+void HardwareControl::SetGroup(int group, int level)
 {
+  if(group == 1)
+  {
+    centipede.digitalWrite(OUT_GROUP1, level);
+  } 
+  else if (group == 2)
+  {
+    centipede.digitalWrite(OUT_GROUP2, level);
+  }
 }
 
 void HardwareControl::SetData(int data)
 {
+  if(data <= 3 && data >= 0)
+  {
+    centipede.digitalWrite(OUT_DATAC, LOW);
+    centipede.digitalWrite(OUT_DATAB, LOW);
+    centipede.digitalWrite(OUT_DATAA, LOW);
+    
+    switch(data)
+    {
+      case 1 :
+      {
+        centipede.digitalWrite(OUT_DATAA, HIGH);
+      }
+      case 2 :
+      {
+        centipede.digitalWrite(OUT_DATAB, HIGH);
+      }
+      case 3 :
+      {
+        centipede.digitalWrite(OUT_DATAC, HIGH);
+      }
+    }
+  }
 }
 
 void HardwareControl::Strobe()
 {
+  centipede.digitalWrite(OUT_STROBE, LOW);
+  delay(80);
+  centipede.digitalWrite(OUT_STROBE, HIGH);
+  delay(10);
+  centipede.digitalWrite(OUT_STROBE, LOW);
 }
+
+
 
 
 

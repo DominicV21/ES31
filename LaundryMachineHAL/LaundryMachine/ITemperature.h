@@ -9,7 +9,6 @@ public:
 
   // Outputs
   virtual void SetHeater(boolean state) = 0;
-  virtual void SetTemperature(int level) = 0;
 };
 
 #endif

@@ -31,11 +31,10 @@ class HardwareControl: public IBuzzer, public ICoin, public ILock, public IMotor
     void SetDirection(int dir);
     void SetProgramIndicator(int program);
     void SetHeater(boolean state);
-    void SetTemperature(int level);
   private:
     Centipede centipede;
     void SetKeySelect(int value);
-    void SetGroup(int group);
+    void SetGroup(int group, int value);
     void SetData(int data);
     void Strobe();
 };
