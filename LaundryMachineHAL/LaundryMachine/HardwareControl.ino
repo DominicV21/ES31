@@ -122,7 +122,7 @@ void HardwareControl::SetSoap1(int level)
 
 void HardwareControl::SetSoap2(int level)
 {
-  if (level ==0 )
+  if (level == 0)
   {
     SetGroup(2, 1);
     SetGroup(1, 0);
@@ -131,7 +131,7 @@ void HardwareControl::SetSoap2(int level)
   else
   {
     SetGroup(2, 1);
-    SetGroup(1,0);
+    SetGroup(1, 0);
     SetData(3);
   }
   Strobe();
